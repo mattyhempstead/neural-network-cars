@@ -5,5 +5,9 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
+		$ npm install express
 	}
+	"dependencies": {
+		"express": "4.10.2",
+	},
 }
