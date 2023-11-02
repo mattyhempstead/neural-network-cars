@@ -32,8 +32,8 @@ class Main:
         print("Track has a length of " + str(round(self.trackLength,2)))
 
         self.genNum = 0
-        self.genLength = 20
-        self.genSize = 10
+        self.genLength = 15
+        self.genSize = 20
         self.genTimer = 0
         
         self.carList = []
@@ -90,7 +90,7 @@ class Main:
         screen.fill(colours.GREY(230))
 
         for checkpoint in self.track["checkpoints"]:
-            pygame.draw.line(screen, colours.GREY(127), checkpoint[0], checkpoint[1], 6)
+            pygame.draw.line(screen, colours.GREY(210), checkpoint[0], checkpoint[1], 6)
         
         for car in self.carList:
             car.render()
@@ -104,15 +104,20 @@ class Main:
         genNumText = self.statsFont.render("Gen No. " + str(self.genNum), 0,  colours.RED)
         screen.blit(genNumText, [10,45])
 
-        genTimerText = self.statsFont.render("Gen Timer: " + str(round(self.genTimer, 2)), 0,  colours.RED)
+        genTimerText = self.statsFont.render("Gen Timer: " + str(round(self.genLength-self.genTimer, 2)), 0,  colours.RED)
         screen.blit(genTimerText, [10,80])
 
         if self.bestBrain != None:
             self.drawBrain()
 
     def drawBrain(self):
-        drawRect = [20,450,300,250]
+        drawRect = [20,440,300,250]
         pygame.draw.rect(screen, colours.GREY(200), drawRect, 3)
+
+        title = self.brainFont.render("Brain of best car", 0, colours.BLACK)
+        titleRect = title.get_rect()
+        titleRect.center = ((drawRect[0]+drawRect[2])/2, drawRect[1]+drawRect[3]+10)
+        screen.blit(title, titleRect.topleft)
 
         brainLayout = []
 
@@ -223,7 +228,7 @@ class Car:  # MAKE CAR HAVE ACCELERATION/DECELERATION ETC. (MAYBE ACCEL/DECEL FO
         self.speed = 300
 
         if parent == None:
-            self.brain = neural_net.Neural_Network([3,2,2])
+            self.brain = neural_net.Neural_Network([3,4,3,2])
         else:
             self.brain = parent.brain.childBrain()
 
@@ -246,7 +251,7 @@ class Car:  # MAKE CAR HAVE ACCELERATION/DECELERATION ETC. (MAYBE ACCEL/DECEL FO
 
         if self.hitWall != True and main.toggleSpeed == False:
             for sightLine in self.sightLines:
-                pygame.draw.line(screen, colours.DARK_GREEN, [int(sightLine[0][0]), int(sightLine[0][1])], [int(sightLine[1][0]), int(sightLine[1][1])], int(self.size/10))
+                pygame.draw.line(screen, (132, 163, 131), [int(sightLine[0][0]), int(sightLine[0][1])], [int(sightLine[1][0]), int(sightLine[1][1])], int(self.size/10))
 
         pygame.draw.polygon(screen, colours.GREEN, self.vertexPoints)
         pygame.draw.polygon(screen, colours.RED, self.vertexPoints, int(self.size/10))
